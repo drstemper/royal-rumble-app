@@ -8,9 +8,12 @@ const DraftDashboard: React.FC = () => {
         participants,
         currentDrafterIndex,
         addWrestler,
+        removeWrestler,
         handleDraftPick,
         isDrafting,
-        addParticipant
+        addParticipant,
+        undo,
+        totalPicks
     } = useGame();
 
     const [newWrestlerName, setNewWrestlerName] = useState('');
@@ -200,8 +203,8 @@ const DraftDashboard: React.FC = () => {
             </header>
 
             <div className="flex-1 overflow-hidden grid grid-cols-12 gap-4 p-4">
-                {/* Left Column: The Pool (3 cols) */}
-                <div className="col-span-3 flex flex-col bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
+                {/* Left Column: The Pool (6 cols) */}
+                <div className="col-span-6 flex flex-col bg-gray-800 rounded-lg overflow-hidden border border-gray-700">
                     <div className="p-4 bg-gray-750 border-b border-gray-700 space-y-3">
                         <div className="flex justify-between items-center">
                             <h2 className="text-xl font-bold text-yellow-500">The Pool</h2>
@@ -271,7 +274,19 @@ const DraftDashboard: React.FC = () => {
                                             </td>
                                             <td className="p-3 text-gray-400">{w.affiliation}</td>
                                             <td className="p-3 text-gray-400 font-mono">{w.odds}</td>
-                                            <td className="p-3 text-right">
+                                            <td className="p-3 text-right flex justify-end gap-2">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        if (confirm(`Remove ${w.name} from the pool?`)) {
+                                                            removeWrestler(w.id);
+                                                        }
+                                                    }}
+                                                    className="text-gray-500 hover:text-red-500 px-2 py-1"
+                                                    title="Remove from Pool"
+                                                >
+                                                    🗑
+                                                </button>
                                                 <span className="text-xs text-green-400 font-bold opacity-0 group-hover:opacity-100 transition uppercase tracking-wider bg-green-900/30 px-2 py-1 rounded border border-green-800">
                                                     Draft
                                                 </span>
@@ -294,8 +309,8 @@ const DraftDashboard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Center Column: The Draft (5 cols) */}
-                <div className="col-span-5 flex flex-col space-y-4">
+                {/* Center Column: The Draft (3 cols) */}
+                <div className="col-span-3 flex flex-col space-y-4">
                     {/* Current Pick Indicator */}
                     <div className="bg-gradient-to-br from-red-600 to-red-900 p-8 rounded-lg shadow-2xl border-2 border-red-500 text-center transform hover:scale-[1.01] transition duration-300">
                         <div className="text-red-200 uppercase tracking-widest text-sm font-semibold mb-2">Current Pick</div>
@@ -311,6 +326,18 @@ const DraftDashboard: React.FC = () => {
                             <div className="h-full bg-white/50 w-full animate-pulse"></div>
                         </div>
                     </div>
+
+                    {/* Undo Control */}
+                    {totalPicks > 0 && (
+                        <div className="flex justify-center">
+                            <button
+                                onClick={undo}
+                                className="bg-gray-700 hover:bg-gray-600 text-gray-300 px-4 py-2 rounded flex items-center gap-2 text-sm font-bold border border-gray-600 transition"
+                            >
+                                ↺ Undo Last Pick
+                            </button>
+                        </div>
+                    )}
 
                     {/* Draft Order List */}
                     <div className="flex-1 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col">
@@ -332,8 +359,8 @@ const DraftDashboard: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Right Column: Rosters (4 cols) */}
-                <div className="col-span-4 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col">
+                {/* Right Column: Rosters (3 cols) */}
+                <div className="col-span-3 bg-gray-800 rounded-lg overflow-hidden border border-gray-700 flex flex-col">
                     <div className="p-4 bg-gray-750 border-b border-gray-700">
                         <h2 className="text-xl font-bold text-blue-400">Rosters</h2>
                     </div>

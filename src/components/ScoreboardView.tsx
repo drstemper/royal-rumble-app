@@ -2,7 +2,11 @@ import React, { useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 
 
-const ScoreboardView: React.FC = () => {
+interface ScoreboardViewProps {
+    onBack?: () => void;
+}
+
+const ScoreboardView: React.FC<ScoreboardViewProps> = ({ onBack }) => {
     const { participants, wrestlers, logs } = useGame();
 
     // Sort participants by score descending
@@ -18,10 +22,18 @@ const ScoreboardView: React.FC = () => {
     return (
         <div className="h-screen flex flex-col bg-black text-white overflow-hidden font-sans">
             {/* Header */}
-            <header className="h-20 bg-gradient-to-r from-blue-900 to-red-900 flex items-center justify-center border-b-4 border-yellow-500 shadow-2xl z-10">
+            <header className="h-20 bg-gradient-to-r from-blue-900 to-red-900 flex items-center justify-center border-b-4 border-yellow-500 shadow-2xl z-10 relative">
                 <h1 className="text-5xl font-black uppercase tracking-widest text-shadow-lg text-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
                     Royal Rumble Scoreboard
                 </h1>
+                {onBack && (
+                    <button
+                        onClick={onBack}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/30 hover:bg-black/80 text-white/50 hover:text-white px-4 py-2 rounded border border-white/20 transition text-sm font-bold uppercase tracking-wider"
+                    >
+                        Exit
+                    </button>
+                )}
             </header>
 
             <div className="flex-1 flex overflow-hidden">

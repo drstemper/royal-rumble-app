@@ -7,7 +7,7 @@ function App() {
   const [view, setView] = useState<'DRAFT' | 'ADMIN' | 'SCOREBOARD'>('DRAFT');
 
   if (view === 'SCOREBOARD') {
-    return <ScoreboardView />;
+    return <ScoreboardView onBack={() => setView('DRAFT')} />;
   }
 
   return (

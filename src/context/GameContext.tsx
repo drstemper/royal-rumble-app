@@ -18,6 +18,7 @@ interface GameContextType extends GameState {
     handleElimination: (eliminatedId: string, eliminatorIds: string[]) => void;
     addParticipant: (name: string) => void;
     addWrestler: (wrestler: Omit<Wrestler, 'id' | 'status' | 'draftedBy' | 'eliminatedBy' | 'entryOrder' | 'eliminationTime'>) => void;
+    removeWrestler: (wrestlerId: string) => void;
     handleDraftPick: (wrestlerId: string) => void;
     enterRing: (wrestlerId: string) => void;
     updateParticipantScore: (participantId: string, newScore: number) => void;
@@ -273,6 +274,12 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // No log for adding to pool to keep clutter down, or maybe detailed?
     };
 
+    const removeWrestler = (wrestlerId: string) => {
+        saveCheckpoint();
+        setWrestlers(prev => prev.filter(w => w.id !== wrestlerId));
+        // No log needed for simple deletion
+    };
+
     const handleDraftPick = (wrestlerId: string) => {
         if (participants.length === 0) return;
         saveCheckpoint();
@@ -366,6 +373,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             handleElimination,
             addParticipant,
             addWrestler,
+            removeWrestler,
             handleDraftPick,
             enterRing,
             updateParticipantScore,
