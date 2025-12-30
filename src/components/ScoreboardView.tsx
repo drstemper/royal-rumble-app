@@ -92,15 +92,11 @@ const ScoreboardView: React.FC<ScoreboardViewProps> = ({ onBack }) => {
                             const owner = participants.find(p => p.id === w.draftedBy);
                             return (
                                 <div key={w.id} className="bg-gray-800 rounded-xl overflow-hidden shadow-2xl border-2 border-blue-500/50 flex flex-col aspect-video relative group animate-in fade-in zoom-in duration-300">
-                                    <div className="absolute top-2 right-2 text-xs font-bold text-gray-400 border border-gray-600 px-2 py-0.5 rounded bg-black/50">
-                                        ENTRY #{w.entryOrder ? new Date(w.entryOrder).toLocaleTimeString([], { minute: '2-digit', second: '2-digit' }) : 'EARLY'}
-                                    </div>
                                     <div className="flex-1 flex items-center justify-center p-4 text-center bg-gradient-to-b from-gray-800 to-gray-900">
                                         <span className="text-3xl font-black text-white leading-tight drop-shadow-md">{w.name}</span>
                                     </div>
-                                    <div className="bg-blue-900 py-2 px-3 flex justify-between items-center text-sm font-bold tracking-wider uppercase text-blue-100">
-                                        <span>OWNER</span>
-                                        <span className="text-yellow-400">{owner?.name || 'Unknown'}</span>
+                                    <div className="absolute bottom-2 right-2 text-sm font-bold tracking-wider uppercase text-yellow-500 drop-shadow-md">
+                                        {owner?.name || 'Unknown'}
                                     </div>
                                 </div>
                             );
