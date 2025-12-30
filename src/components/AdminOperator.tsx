@@ -10,8 +10,6 @@ const AdminOperator: React.FC = () => {
         handleElimination,
         updateParticipantScore,
         undo,
-        exportState,
-        importState,
         history
     } = useGame();
 
@@ -23,19 +21,6 @@ const AdminOperator: React.FC = () => {
     // Manual Score Adjustment State
     const [isEditScoreModalOpen, setIsEditScoreModalOpen] = useState(false);
     const [editingParticipant, setEditingParticipant] = useState<{ id: string, name: string, score: number } | null>(null);
-
-    const fileInputRef = React.useRef<HTMLInputElement>(null);
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const json = event.target?.result as string;
-            if (json) importState(json);
-        };
-        reader.readAsText(file);
-    };
 
     // Derived Lists
     const draftedWrestlers = wrestlers.filter(w => w.status === 'DRAFTED');
@@ -83,26 +68,6 @@ const AdminOperator: React.FC = () => {
             <header className="flex justify-between items-center mb-6 border-b border-gray-700 pb-4">
                 <h1 className="text-3xl font-bold uppercase text-red-500 tracking-wider">Event Operator</h1>
                 <div className="flex gap-2">
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        className="hidden"
-                        accept=".json"
-                    />
-                    <button
-                        onClick={() => fileInputRef.current?.click()}
-                        className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded font-bold text-sm"
-                    >
-                        Import
-                    </button>
-                    <button
-                        onClick={exportState}
-                        className="bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded font-bold text-sm"
-                    >
-                        Export
-                    </button>
-                    <div className="w-px bg-gray-600 mx-2"></div>
                     <button
                         onClick={undo}
                         disabled={history.length === 0}
@@ -228,8 +193,8 @@ const AdminOperator: React.FC = () => {
                                             key={w.id}
                                             onClick={() => toggleEliminator(w.id)}
                                             className={`p-4 rounded border-2 text-left transition-all ${selectedEliminators.includes(w.id)
-                                                    ? 'bg-blue-900/50 border-blue-500 text-white'
-                                                    : 'bg-gray-700 border-transparent hover:bg-gray-600 text-gray-300'
+                                                ? 'bg-blue-900/50 border-blue-500 text-white'
+                                                : 'bg-gray-700 border-transparent hover:bg-gray-600 text-gray-300'
                                                 }`}
                                         >
                                             <div className="font-bold">{w.name}</div>
